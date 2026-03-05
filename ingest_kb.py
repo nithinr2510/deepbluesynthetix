@@ -3,6 +3,7 @@ import glob
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 import chromadb
+from pypdf import PdfReader
 
 def setup_mock_data(kb_dir="./kb_data"):
     """
@@ -11,7 +12,7 @@ def setup_mock_data(kb_dir="./kb_data"):
     """
     os.makedirs(kb_dir, exist_ok=True)
     
-    existing_files = glob.glob(os.path.join(kb_dir, "*.txt")) + glob.glob(os.path.join(kb_dir, "*.md"))
+    existing_files = glob.glob(os.path.join(kb_dir, "*.txt")) + glob.glob(os.path.join(kb_dir, "*.md")) + glob.glob(os.path.join(kb_dir, "*.pdf"))
     
     if not existing_files:
         print(f"No documents found in {kb_dir}. Generating mock data...")
@@ -46,10 +47,14 @@ def setup_mock_data(kb_dir="./kb_data"):
 
 def load_and_split_documents(kb_dir="./kb_data", chunk_size=500, chunk_overlap=50):
     """
-    Reads all .txt and .md files from the KB directory and splits them into chunks.
+    Reads all .txt, .md, and .pdf files from the KB directory and splits them into chunks.
     """
     print("Loading and splitting documents...")
-    files = glob.glob(os.path.join(kb_dir, "*.txt")) + glob.glob(os.path.join(kb_dir, "*.md"))
+    files = (
+        glob.glob(os.path.join(kb_dir, "*.txt"))
+        + glob.glob(os.path.join(kb_dir, "*.md"))
+        + glob.glob(os.path.join(kb_dir, "*.pdf"))
+    )
     
     # Initialize the LangChain text splitter
     splitter = RecursiveCharacterTextSplitter(
@@ -63,8 +68,28 @@ def load_and_split_documents(kb_dir="./kb_data", chunk_size=500, chunk_overlap=5
     
     for filepath in files:
         filename = os.path.basename(filepath)
-        with open(filepath, "r", encoding="utf-8") as f:
-            text = f.read()
+        
+        # Handle PDF files using pypdf
+        if filepath.lower().endswith(".pdf"):
+            try:
+                reader = PdfReader(filepath)
+                text = ""
+                for page in reader.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + "\n"
+                print(f"  📄 Extracted {len(reader.pages)} pages from {filename}")
+            except Exception as e:
+                print(f"  ⚠️ Failed to read PDF {filename}: {e}")
+                continue
+        else:
+            # Handle .txt and .md files
+            with open(filepath, "r", encoding="utf-8") as f:
+                text = f.read()
+        
+        if not text.strip():
+            print(f"  ⚠️ Skipping empty file: {filename}")
+            continue
             
         file_chunks = splitter.split_text(text)
         for chunk in file_chunks:

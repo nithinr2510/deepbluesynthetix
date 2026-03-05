@@ -1,19 +1,15 @@
 {
   "cat2id": {
-    "Refund": 0,
-    "Login": 1,
-    "Delivery": 2,
-    "Billing": 3,
-    "Account": 4,
-    "Other": 5
+    "Incident": 0,
+    "Request": 1,
+    "Problem": 2,
+    "Change": 3
   },
   "id2cat": {
-    "0": "Refund",
-    "1": "Login",
-    "2": "Delivery",
-    "3": "Billing",
-    "4": "Account",
-    "5": "Other"
+    "0": "Incident",
+    "1": "Request",
+    "2": "Problem",
+    "3": "Change"
   },
   "urg2id": {
     "High": 0,

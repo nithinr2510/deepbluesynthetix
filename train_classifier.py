@@ -50,7 +50,7 @@ WEIGHT_DECAY = 0.01
 DROPOUT      = 0.3
 VAL_RATIO    = 0.2
 
-CATEGORIES = ["Refund", "Login", "Delivery", "Billing", "Account", "Other"]
+CATEGORIES = ["Incident", "Request", "Problem", "Change"]
 URGENCIES  = ["High", "Medium", "Low"]
 
 DATA_PATH   = "customer_support_tickets.csv"

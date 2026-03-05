@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+/* ── Dark Mode Design Tokens ─────────────────── */
+:root {
+  --background: #0a0a0f;
+  --foreground: #e4e4e7;
+  --card: #111118;
+  --card-foreground: #e4e4e7;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a24;
+  --secondary-foreground: #a1a1aa;
+  --muted: #18181b;
+  --muted-foreground: #71717a;
+  --border: #27272a;
+  --destructive: #ef4444;
+  --success: #22c55e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Utility Classes ──────────────────────────── */
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-foreground {
+  color: var(--primary-foreground);
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-destructive {
+  color: var(--destructive);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.border-border {
+  border-color: var(--border);
+}
+
+/* ── Card & Glass Styles ──────────────────────── */
+.card-elevated {
+  background: linear-gradient(145deg, rgba(17, 17, 24, 0.95) 0%, rgba(10, 10, 15, 0.95) 100%);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+.glass {
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+/* ── Gradient Text ────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow Effects ─────────────────────────────── */
+.glow-primary-sm {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15), 0 0 30px rgba(99, 102, 241, 0.05);
+}
+
+/* ── Animations ───────────────────────────────── */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 1.2s linear infinite;
+}
