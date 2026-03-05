@@ -1,0 +1,28 @@
+{
+  "cat2id": {
+    "Refund": 0,
+    "Login": 1,
+    "Delivery": 2,
+    "Billing": 3,
+    "Account": 4,
+    "Other": 5
+  },
+  "id2cat": {
+    "0": "Refund",
+    "1": "Login",
+    "2": "Delivery",
+    "3": "Billing",
+    "4": "Account",
+    "5": "Other"
+  },
+  "urg2id": {
+    "High": 0,
+    "Medium": 1,
+    "Low": 2
+  },
+  "id2urg": {
+    "0": "High",
+    "1": "Medium",
+    "2": "Low"
+  }
+}
