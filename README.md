@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤖 Deep Blue Synthetix
+# 🤖 HelpDeskAi
 ### AI-Powered Customer Support Ticket Orchestrator & Auto-Responder
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/release/python-3100/)
@@ -16,7 +16,7 @@
 
 ## 📖 Project Abstract
 
-**Deep Blue Synthetix** is an intelligent, edge-capable customer support orchestration pipeline built for the Synthetix 4.0 Hackathon. 
+**HelpDeskAi** is an intelligent, edge-capable customer support orchestration pipeline built for the Synthetix 4.0 Hackathon. 
 
 The system relies on a hybrid AI architecture that combines the rapid inference of specialized Deep Learning models with the nuanced reasoning of Large Language Models. At its core sits a custom **Multi-Task `DistilBERT` classification model** trained to simultaneously predict a support ticket's category and its relative urgency. When a ticket arrives, the framework routes it through the neural network while simultaneously vectorizing its contents to perform a semantic search against a local **ChromaDB Knowledge Base**. In the final step, the system uses **Retrieval-Augmented Generation (RAG)** via LangChain and the Groq API (Llama3-8b) to synthesize a highly accurate, grounded draft response for human agents.
 
@@ -32,7 +32,7 @@ The system relies on a hybrid AI architecture that combines the rapid inference 
 
 ## 🏗️ Architecture Workflow
 
-Here is exactly how a ticket flows through the Deep Blue Synthetix ecosystem:
+Here is exactly how a ticket flows through the HelpDeskAi ecosystem:
 
 ```mermaid
 graph TD

@@ -100,7 +100,7 @@ export const TicketForm = ({ onSubmit, loading }: TicketFormProps) => {
                     ) : (
                         <>
                             <Send className="w-4 h-4" />
-                            Process with Deep Blue AI
+                            Process with HelpDeskAi
                         </>
                     )}
                 </button>

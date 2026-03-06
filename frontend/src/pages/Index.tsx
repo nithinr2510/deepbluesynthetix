@@ -29,7 +29,7 @@ const Index = () => {
             setResult(data);
             toast.success("Ticket processed successfully!");
         } catch (err: any) {
-            toast.error("Failed to reach Deep Blue AI", {
+            toast.error("Failed to reach HelpDeskAi", {
                 description: err.message || "Ensure the backend is running at localhost:8000",
             });
         } finally {
@@ -51,7 +51,7 @@ const Index = () => {
                             <Zap className="w-5 h-5 text-primary" />
                         </div>
                         <h1 className="text-xl font-bold tracking-tight">
-                            <span className="gradient-text">Deep Blue Synthetix</span>
+                            <span className="gradient-text">HelpDeskAi</span>
                         </h1>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -89,7 +89,7 @@ const Index = () => {
                                     className="card-elevated rounded-xl p-12 flex flex-col items-center justify-center min-h-[400px]"
                                 >
                                     <div className="w-14 h-14 rounded-full border-2 border-primary/30 border-t-primary animate-spin-slow" />
-                                    <p className="mt-6 text-sm text-muted-foreground font-mono">Processing with Deep Blue AI…</p>
+                                    <p className="mt-6 text-sm text-muted-foreground font-mono">Processing with HelpDeskAi…</p>
                                 </motion.div>
                             ) : result ? (
                                 <motion.div
