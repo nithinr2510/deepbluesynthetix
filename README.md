@@ -1,45 +1,65 @@
-📘 HelpDeskAi — Complete Project Explanation
-AI-Powered Customer Support Ticket Orchestrator & Auto-Responder
+# 📘 HelpDeskAi — Complete Project Explanation
 
-A hackathon project that combines Deep Learning, Vector Databases, and Large Language Models to automate the entire customer support lifecycle — from ticket classification to draft reply generation.
+> **AI-Powered Customer Support Ticket Orchestrator & Auto-Responder**
+>
+> A hackathon project that combines **Deep Learning**, **Vector Databases**, and **Large Language Models** to automate the entire customer support lifecycle — from ticket classification to draft reply generation.
 
-1. 🔬 Problem Statement (Research-Grade)
-The Problem
-In the modern enterprise, customer support departments receive thousands of tickets daily across multiple channels — Email, Chat, Social Media. Each ticket must be:
+---
 
-Read and understood by a human agent
-Categorized into a department (Billing, Login, Delivery, etc.)
-Prioritized by urgency (High, Medium, Low)
-Researched by searching internal knowledge base (KB) documents for the relevant policy
-Responded to with an accurate, empathetic, and polic.y-grounded reply
-This manual process creates three critical bottlenecks:
+## 1. 🔬 Problem Statement (Research-Grade)
 
-Bottleneck	Impact
-Latency	Average human response time is 4–12 hours; customers expect replies under 1 hour
-Inconsistency	Different agents provide different answers for the same issue
-Scalability	Hiring more agents is expensive and doesn't scale linearly
-The Research Question
-"Can we build an end-to-end AI pipeline that orchestrates a fine-tuned classification model, a semantic retrieval engine, and a constrained large language model to automate ticket triage and response generation — while ensuring zero hallucination through Retrieval-Augmented Generation (RAG)?"
+### The Problem
 
-Our Solution
-HelpDeskAi is an AI Orchestrator that chains three specialized AI systems together in a single pipeline:
+In the modern enterprise, customer support departments receive **thousands of tickets daily** across multiple channels — Email, Chat, Social Media. Each ticket must be:
 
-DistilBERT (a fine-tuned deep learning model) → classifies tickets into categories and urgency levels
-ChromaDB + SentenceTransformer (a vector database + embedding model) → retrieves the most relevant company policy documents
-Llama 3.1 (a large language model via Groq API) → drafts a professional, grounded reply using ONLY the retrieved policy documents
-The key innovation is the RAG (Retrieval-Augmented Generation) architecture — the LLM is never allowed to make up information. It can only respond based on what the knowledge base contains. If no relevant policy is found, it responds: "I need more clarification to resolve this."
+1. **Read and understood** by a human agent
+2. **Categorized** into a department (Billing, Login, Delivery, etc.)
+3. **Prioritized** by urgency (High, Medium, Low)
+4. **Researched** by searching internal knowledge base (KB) documents for the relevant policy
+5. **Responded to** with an accurate, empathetic, and polic.y-grounded reply
 
-🌟 The Novelty: What Makes This Project Unique?
+This manual process creates **three critical bottlenecks**:
+
+| Bottleneck | Impact |
+|---|---|
+| **Latency** | Average human response time is 4–12 hours; customers expect replies under 1 hour |
+| **Inconsistency** | Different agents provide different answers for the same issue |
+| **Scalability** | Hiring more agents is expensive and doesn't scale linearly |
+
+### The Research Question
+
+> *"Can we build an end-to-end AI pipeline that orchestrates a fine-tuned classification model, a semantic retrieval engine, and a constrained large language model to automate ticket triage and response generation — while ensuring zero hallucination through Retrieval-Augmented Generation (RAG)?"*
+
+### Our Solution
+
+**HelpDeskAi** is an **AI Orchestrator** that chains three specialized AI systems together in a single pipeline:
+
+1. **DistilBERT** (a fine-tuned deep learning model) → classifies tickets into categories and urgency levels
+2. **ChromaDB + SentenceTransformer** (a vector database + embedding model) → retrieves the most relevant company policy documents
+3. **Llama 3.1** (a large language model via Groq API) → drafts a professional, grounded reply using ONLY the retrieved policy documents
+
+The key innovation is the **RAG (Retrieval-Augmented Generation) architecture** — the LLM is never allowed to make up information. It can only respond based on what the knowledge base contains. If no relevant policy is found, it responds: *"I need more clarification to resolve this."*
+
+---
+
+## 🌟 The Novelty: What Makes This Project Unique?
+
 When presenting to judges, highlight these four key technical innovations that elevate this project beyond a standard API wrapper:
 
-Multi-Task Architecture: Instead of using one model for Category and another for Urgency, our DistilBERT model uses a single shared backbone with two parallel classification heads. This cuts GPU/CPU memory usage in half and makes inference 2x faster.
-Hybrid Intelligence (ML + Expert Rules): We don't blindly trust the ML model. The system uses a hybrid approach — DistilBERT handles complex semantic understanding, but a secondary Deterministic Rule Engine (main.py::classify_urgency) scans for critical liability keywords (e.g., "hacked", "outage", "scam") to strictly guarantee High urgency on sensitive tickets.
-Zero-Hallucination Enforcement: Auto-responders in the industry either use rigid templates (too dumb) or standard LLMs that hallucinate (too dangerous). We solved this by using ChromaDB semantic search as a strict filter. The llama-3.1 model acts only as a summarizer of the retrieved policy, mathematically prohibiting it from inventing rules.
-Edge-to-Cloud Orchestration: The heavy semantic tasks (DistilBERT classification and ChromaDB retrieval) run locally on the edge/server avoiding API latency, while only the final generation step is offloaded to the Groq LPU Cloud for 500-token/sec generation. This hybrid deployment achieves a blistering 3-5 second total turnaround time.
-2. 🔄 Project Workflow — The Complete Pipeline
+1. **Multi-Task Architecture:** Instead of using one model for Category and another for Urgency, our DistilBERT model uses a **single shared backbone** with two parallel classification heads. This cuts GPU/CPU memory usage in half and makes inference 2x faster.
+2. **Hybrid Intelligence (ML + Expert Rules):** We don't blindly trust the ML model. The system uses a hybrid approach — DistilBERT handles complex semantic understanding, but a secondary **Deterministic Rule Engine** (`main.py::classify_urgency`) scans for critical liability keywords (e.g., "hacked", "outage", "scam") to strictly guarantee High urgency on sensitive tickets.
+3. **Zero-Hallucination Enforcement:** Auto-responders in the industry either use rigid templates (too dumb) or standard LLMs that hallucinate (too dangerous). We solved this by using ChromaDB semantic search as a strict filter. The `llama-3.1` model acts only as a *summarizer* of the *retrieved policy*, mathematically prohibiting it from inventing rules.
+4. **Edge-to-Cloud Orchestration:** The heavy semantic tasks (DistilBERT classification and ChromaDB retrieval) run **locally on the edge/server** avoiding API latency, while only the final generation step is offloaded to the **Groq LPU Cloud** for 500-token/sec generation. This hybrid deployment achieves a blistering 3-5 second total turnaround time.
+
+---
+
+## 2. 🔄 Project Workflow — The Complete Pipeline
+
 When a customer submits a support ticket, the following happens in sequence:
 
-Step-by-Step Walkthrough
+### Step-by-Step Walkthrough
+
+```
 Customer submits ticket (Subject + Description + Channel + Timestamp)
          │
          ▼
@@ -70,23 +90,35 @@ Confidence
 │  {category, urgency, confidence, summary,   │
 │   draft_reply, sources}                     │
 └─────────────────────────────────────────────┘
-What Each Stage Does
-Stage	AI Component	Input	Output	Time
-Stage 1: Classify	Fine-tuned DistilBERT	Ticket text	Category (Refund/Login/Delivery/Billing/Account/Other), Urgency (High/Medium/Low), Confidence (%)	~50ms
-Stage 2: Retrieve	SentenceTransformer + ChromaDB	Ticket text	Top-2 most relevant KB document chunks + source filenames	~20ms
-Stage 3: Generate	Llama 3.1 (via Groq API)	Ticket text + Retrieved KB chunks	1-sentence summary + Full draft reply	~2-4s
-The 5 Core Pipeline Components
+```
+
+### What Each Stage Does
+
+| Stage | AI Component | Input | Output | Time |
+|---|---|---|---|---|
+| **Stage 1: Classify** | Fine-tuned DistilBERT | Ticket text | Category (Refund/Login/Delivery/Billing/Account/Other), Urgency (High/Medium/Low), Confidence (%) | ~50ms |
+| **Stage 2: Retrieve** | SentenceTransformer + ChromaDB | Ticket text | Top-2 most relevant KB document chunks + source filenames | ~20ms |
+| **Stage 3: Generate** | Llama 3.1 (via Groq API) | Ticket text + Retrieved KB chunks | 1-sentence summary + Full draft reply | ~2-4s |
+
+### The 5 Core Pipeline Components
+
 Our end-to-end architecture is built on five interconnected pillars:
 
-Ticket Preprocessing: Raw tickets (Subject + Description) are concatenated and cleaned (preprocess_kaggle.py and main.py) before being passed to the AI models to ensure maximum context.
-Category & Urgency Logic (Hybrid ML + Rules): A fine-tuned DistilBERT model predicts initial categories and urgencies. These are then refined by a smart rule-based keyword system (reclassify_category and classify_urgency) for guaranteed accuracy on edge cases.
-KB Ingestion + Embeddings: Company policy documents (.txt, .md, .pdf) are split into overlapping 500-character chunks, converted to 384-dimensional mathematical vectors using SentenceTransformer, and stored persistently in a ChromaDB database.
-Top-K Retrieval: When a live ticket arrives, its embedding is compared against the vector database to instantly retrieve the Top-2 most semantically relevant policy chunks.
-Grounded Reply Generation: A strict RAG prompt forces Llama 3.1 (via Groq) to draft a professional response using ONLY the Top-K retrieved context, ensuring 100% grounded generation with zero hallucination.
-3. 🧹 Preprocessing & Fine-Tuning Methods
-3.1 Data Preprocessing (preprocess_kaggle.py)
-We use a Kaggle customer support dataset containing real-world support tickets. The preprocessing pipeline:
+1. **Ticket Preprocessing:** Raw tickets (Subject + Description) are concatenated and cleaned (`preprocess_kaggle.py` and `main.py`) before being passed to the AI models to ensure maximum context.
+2. **Category & Urgency Logic (Hybrid ML + Rules):** A fine-tuned DistilBERT model predicts initial categories and urgencies. These are then refined by a smart rule-based keyword system (`reclassify_category` and `classify_urgency`) for guaranteed accuracy on edge cases.
+3. **KB Ingestion + Embeddings:** Company policy documents (.txt, .md, .pdf) are split into overlapping 500-character chunks, converted to 384-dimensional mathematical vectors using SentenceTransformer, and stored persistently in a ChromaDB database.
+4. **Top-K Retrieval:** When a live ticket arrives, its embedding is compared against the vector database to instantly retrieve the **Top-2** most semantically relevant policy chunks.
+5. **Grounded Reply Generation:** A strict RAG prompt forces Llama 3.1 (via Groq) to draft a professional response using ONLY the Top-K retrieved context, ensuring 100% grounded generation with zero hallucination.
 
+---
+
+## 3. 🧹 Preprocessing & Fine-Tuning Methods
+
+### 3.1 Data Preprocessing (`preprocess_kaggle.py`)
+
+We use a **Kaggle customer support dataset** containing real-world support tickets. The preprocessing pipeline:
+
+```python
 # Step 1: Load raw Kaggle CSV with columns like "Ticket Subject", "Ticket Description", etc.
 df = pd.read_csv('DATASETS/customer_support_tickets.csv')
 
@@ -99,13 +131,17 @@ df["urgency"]  = df["Ticket Priority"] # e.g., High, Medium, Low
 
 # Step 4: Drop rows with missing values and save
 final_df = df[["ticket_text", "category", "urgency"]].dropna()
-Key decisions:
+```
 
-Subject + Description concatenation: This gives the model more context. A ticket saying just "Help" in the subject but "My package hasn't arrived in 10 days" in the description would be misclassified without the description.
-Dropping NaN rows: Ensures clean training data — no tickets with missing categories or urgency levels.
-3.2 Knowledge Base Preprocessing (ingest_kb.py)
-The company's internal policy documents (.txt, .md, .pdf files) are preprocessed for semantic search:
+**Key decisions:**
+- **Subject + Description concatenation**: This gives the model more context. A ticket saying just "Help" in the subject but "My package hasn't arrived in 10 days" in the description would be misclassified without the description.
+- **Dropping NaN rows**: Ensures clean training data — no tickets with missing categories or urgency levels.
 
+### 3.2 Knowledge Base Preprocessing (`ingest_kb.py`)
+
+The company's internal policy documents (`.txt`, `.md`, `.pdf` files) are preprocessed for semantic search:
+
+```python
 # Step 1: Read all files from the kb_data/ directory
 files = glob.glob("*.txt") + glob.glob("*.md") + glob.glob("*.pdf")
 
@@ -126,55 +162,67 @@ embeddings = SentenceTransformer("all-MiniLM-L6-v2").encode(chunks)
 
 # Step 5: Store in ChromaDB (persistent vector database)
 collection.add(documents=chunks, embeddings=embeddings, metadatas=metadatas, ids=ids)
-Why chunking?
+```
 
-LLMs have limited context windows. A 100-page PDF cannot be fed directly.
-Small chunks (500 characters) with 50-character overlap ensure that relevant information is precisely retrieved without losing context at chunk boundaries.
-The RecursiveCharacterTextSplitter intelligently splits on paragraph boundaries first, preserving semantic coherence.
-3.3 Model Fine-Tuning (train_classifier.py)
+**Why chunking?**
+- LLMs have limited context windows. A 100-page PDF cannot be fed directly.
+- Small chunks (500 characters) with 50-character overlap ensure that relevant information is precisely retrieved without losing context at chunk boundaries.
+- The `RecursiveCharacterTextSplitter` intelligently splits on paragraph boundaries first, preserving semantic coherence.
+
+### 3.3 Model Fine-Tuning (`train_classifier.py`)
+
 The DistilBERT model is fine-tuned using the following process:
 
-Hyperparameter	Value	Justification
-Base Model	distilbert-base-uncased	40% smaller and 60% faster than BERT-base, with 97% of BERT's performance
-Max Sequence Length	128 tokens	Sufficient for most support tickets (avg 50-80 tokens)
-Batch Size	16	Balances GPU memory usage and training stability
-Epochs	3	Prevents overfitting on the relatively small dataset
-Learning Rate	2e-5	Standard for transformer fine-tuning (small enough to not destroy pretrained weights)
-Weight Decay	0.01	L2 regularization to prevent overfitting
-Dropout	0.3	Applied before each classification head for regularization
-Optimizer	AdamW	Adam with decoupled weight decay — the industry standard for transformers
-Loss Function	CrossEntropyLoss (×2)	One for category head, one for urgency head, summed equally
-Gradient Clipping	max_norm=1.0	Prevents exploding gradients during backpropagation
-Validation Split	80/20	Stratified on category to ensure balanced evaluation
-Training Process:
+| Hyperparameter | Value | Justification |
+|---|---|---|
+| **Base Model** | `distilbert-base-uncased` | 40% smaller and 60% faster than BERT-base, with 97% of BERT's performance |
+| **Max Sequence Length** | 128 tokens | Sufficient for most support tickets (avg 50-80 tokens) |
+| **Batch Size** | 16 | Balances GPU memory usage and training stability |
+| **Epochs** | 3 | Prevents overfitting on the relatively small dataset |
+| **Learning Rate** | 2e-5 | Standard for transformer fine-tuning (small enough to not destroy pretrained weights) |
+| **Weight Decay** | 0.01 | L2 regularization to prevent overfitting |
+| **Dropout** | 0.3 | Applied before each classification head for regularization |
+| **Optimizer** | AdamW | Adam with decoupled weight decay — the industry standard for transformers |
+| **Loss Function** | CrossEntropyLoss (×2) | One for category head, one for urgency head, summed equally |
+| **Gradient Clipping** | max_norm=1.0 | Prevents exploding gradients during backpropagation |
+| **Validation Split** | 80/20 | Stratified on category to ensure balanced evaluation |
 
-Load the preprocessed CSV data
-Encode labels: Category → integer IDs (0-5), Urgency → integer IDs (0-2)
-Split into 80% training, 20% validation (stratified)
-Tokenize all texts using DistilBertTokenizerFast
-Train for 3 epochs, tracking loss + accuracy for both heads
-Save the best model (lowest validation loss) along with tokenizer and label maps
-4. 🤖 AI Models Explained
-4.1 DistilBERT — The Classification Model
-What is DistilBERT?
+**Training Process:**
+1. Load the preprocessed CSV data
+2. Encode labels: Category → integer IDs (0-5), Urgency → integer IDs (0-2)
+3. Split into 80% training, 20% validation (stratified)
+4. Tokenize all texts using `DistilBertTokenizerFast`
+5. Train for 3 epochs, tracking loss + accuracy for both heads
+6. Save the best model (lowest validation loss) along with tokenizer and label maps
 
-DistilBERT is a distilled version of Google's BERT (Bidirectional Encoder Representations from Transformers). It was created by Hugging Face using a technique called knowledge distillation — training a smaller "student" model to mimic the behavior of a larger "teacher" model.
+---
 
-Property	BERT-base	DistilBERT
-Parameters	110 million	66 million
-Layers	12	6
-Hidden Size	768	768
-Speed	1x baseline	1.6x faster
-Accuracy	100% baseline	97% of BERT
-Why DistilBERT for this project?
+## 4. 🤖 AI Models Explained
 
-It's fast enough for real-time inference (< 50ms per prediction)
-Its 97% accuracy retention means we sacrifice almost nothing for the speed gain
-It runs on CPU without requiring a GPU, making deployment easy
-How we use it — Multi-Task Architecture:
+### 4.1 DistilBERT — The Classification Model
 
-We don't use vanilla DistilBERT. We built a Multi-Task version with two classification heads:
+**What is DistilBERT?**
 
+DistilBERT is a **distilled version of Google's BERT** (Bidirectional Encoder Representations from Transformers). It was created by Hugging Face using a technique called **knowledge distillation** — training a smaller "student" model to mimic the behavior of a larger "teacher" model.
+
+| Property | BERT-base | DistilBERT |
+|---|---|---|
+| Parameters | 110 million | 66 million |
+| Layers | 12 | 6 |
+| Hidden Size | 768 | 768 |
+| Speed | 1x baseline | 1.6x faster |
+| Accuracy | 100% baseline | 97% of BERT |
+
+**Why DistilBERT for this project?**
+- It's fast enough for **real-time inference** (< 50ms per prediction)
+- Its 97% accuracy retention means we sacrifice almost nothing for the speed gain
+- It runs on **CPU** without requiring a GPU, making deployment easy
+
+**How we use it — Multi-Task Architecture:**
+
+We don't use vanilla DistilBERT. We built a **Multi-Task** version with two classification heads:
+
+```
 Input Text: "I forgot my password and the reset link doesn't work"
          │
          ▼
@@ -196,46 +244,61 @@ Input Text: "I forgot my password and the reset link doesn't work"
 └────┬────┘ └────┬────┘
      ▼           ▼
   "Login"      "Low"
+```
+
 Both heads share the same DistilBERT backbone, which means:
+- **Shared learning**: Patterns useful for category prediction also help urgency prediction
+- **Single forward pass**: Both predictions are made simultaneously, making it 2x faster than running two separate models
+- **Lower memory**: Only one copy of the 66M-parameter backbone is loaded
 
-Shared learning: Patterns useful for category prediction also help urgency prediction
-Single forward pass: Both predictions are made simultaneously, making it 2x faster than running two separate models
-Lower memory: Only one copy of the 66M-parameter backbone is loaded
-4.2 Llama 3.1 — The Large Language Model
-What is Llama 3.1?
+### 4.2 Llama 3.1 — The Large Language Model
 
-Llama 3.1 is Meta's open-source large language model. We use the llama-3.1-8b-instant variant through the Groq API, which runs inference on specialized LPU (Language Processing Unit) hardware for ultra-fast generation.
+**What is Llama 3.1?**
 
-Property	Value
-Developer	Meta AI
-Parameters	8 Billion
-Context Window	128K tokens
-API Provider	Groq (LPU inference)
-Inference Speed	~500 tokens/second via Groq
-Temperature	0.0 (deterministic — no randomness)
-Why Llama 3.1 for this project?
+Llama 3.1 is Meta's open-source large language model. We use the `llama-3.1-8b-instant` variant through the **Groq API**, which runs inference on specialized LPU (Language Processing Unit) hardware for ultra-fast generation.
 
-8B parameters is large enough for high-quality customer support replies, but small enough for fast inference
-Groq's LPU hardware makes it respond in 2-4 seconds, fast enough for real-time use
-Temperature = 0.0 ensures deterministic, consistent replies (no randomness)
-It's free to use via the Groq API, making it ideal for hackathons
-How we use it — Two LLM Calls:
+| Property | Value |
+|---|---|
+| Developer | Meta AI |
+| Parameters | 8 Billion |
+| Context Window | 128K tokens |
+| API Provider | Groq (LPU inference) |
+| Inference Speed | ~500 tokens/second via Groq |
+| Temperature | 0.0 (deterministic — no randomness) |
 
-Call	Purpose	System Prompt
-Call 1: Draft Reply	Write a professional reply to the customer	"You are a professional customer support agent. Use ONLY the provided Knowledge Base context. Never invent information. Sign off as 'HelpDeskAi Support Team'."
-Call 2: Summary	Summarize the customer's issue in 1 sentence	"Write a single short sentence summary of the user's issue."
-4.3 SentenceTransformer — The Embedding Model
-What is it?
+**Why Llama 3.1 for this project?**
+- **8B parameters** is large enough for high-quality customer support replies, but small enough for fast inference
+- **Groq's LPU hardware** makes it respond in 2-4 seconds, fast enough for real-time use
+- **Temperature = 0.0** ensures deterministic, consistent replies (no randomness)
+- It's **free to use** via the Groq API, making it ideal for hackathons
 
-all-MiniLM-L6-v2 is a lightweight transformer model that converts text into 384-dimensional vectors (embeddings). These vectors capture the semantic meaning of the text, so similar texts have similar vectors.
+**How we use it — Two LLM Calls:**
 
-Property	Value
-Model	all-MiniLM-L6-v2
-Output Dimension	384
-Speed	~14,000 sentences/second
-Use Case	Encoding KB documents and queries for semantic search
-5. 🏗️ Technology Stack — Frontend, Backend & Spine
-Architecture Diagram
+| Call | Purpose | System Prompt |
+|---|---|---|
+| **Call 1: Draft Reply** | Write a professional reply to the customer | "You are a professional customer support agent. Use ONLY the provided Knowledge Base context. Never invent information. Sign off as 'HelpDeskAi Support Team'." |
+| **Call 2: Summary** | Summarize the customer's issue in 1 sentence | "Write a single short sentence summary of the user's issue." |
+
+### 4.3 SentenceTransformer — The Embedding Model
+
+**What is it?**
+
+`all-MiniLM-L6-v2` is a lightweight transformer model that converts text into **384-dimensional vectors** (embeddings). These vectors capture the **semantic meaning** of the text, so similar texts have similar vectors.
+
+| Property | Value |
+|---|---|
+| Model | all-MiniLM-L6-v2 |
+| Output Dimension | 384 |
+| Speed | ~14,000 sentences/second |
+| Use Case | Encoding KB documents and queries for semantic search |
+
+---
+
+## 5. 🏗️ Technology Stack — Frontend, Backend & Spine
+
+### Architecture Diagram
+
+```
 ┌───────────────────────────────────────────────────────────┐
 │                    FRONTEND LAYER                         │
 │                                                           │
@@ -268,44 +331,60 @@ Architecture Diagram
 │  Local CPU   │ │   DB)      │ │   LLM)      │
 │  inference   │ │  Local     │ │  Cloud API  │
 └──────────────┘ └────────────┘ └─────────────┘
-Tech Stack Breakdown
-Layer	Technology	Role
-Frontend	Vanilla HTML + CSS + JavaScript	Single-file dashboard (Synthetix frontend.html) served by FastAPI
-Backend	FastAPI (Python)	REST API server, orchestration engine, static file server
-Classification	PyTorch + Hugging Face Transformers	Fine-tuned DistilBERT for multi-task classification
-Embeddings	SentenceTransformer (all-MiniLM-L6-v2)	Converts text to 384-dim vectors for semantic search
-Vector Database	ChromaDB (Persistent)	Stores and searches KB document embeddings
-LLM	Llama 3.1-8B via Groq API	Generates summaries and draft replies
-LLM Orchestration	LangChain	Prompt template management + output parsing
-Env Management	python-dotenv	Manages API keys securely via .env file
-PDF Parsing	pypdf	Extracts text from PDF knowledge base documents
-Text Splitting	LangChain RecursiveCharacterTextSplitter	Chunks documents for vector storage
-The "Spine" — What Ties Everything Together
-The spine of this project is the FastAPI orchestrator (main.py). It is the central nervous system that:
+```
 
-Loads all models into memory at startup (DistilBERT, SentenceTransformer, ChromaDB)
-Receives HTTP requests from the frontend
-Calls each AI component in sequence: Classify → Retrieve → Generate
-Packages and returns the combined result as structured JSON
-Serves the frontend at the root URL /
+### Tech Stack Breakdown
+
+| Layer | Technology | Role |
+|---|---|---|
+| **Frontend** | Vanilla HTML + CSS + JavaScript | Single-file dashboard (`Synthetix frontend.html`) served by FastAPI |
+| **Backend** | FastAPI (Python) | REST API server, orchestration engine, static file server |
+| **Classification** | PyTorch + Hugging Face Transformers | Fine-tuned DistilBERT for multi-task classification |
+| **Embeddings** | SentenceTransformer (`all-MiniLM-L6-v2`) | Converts text to 384-dim vectors for semantic search |
+| **Vector Database** | ChromaDB (Persistent) | Stores and searches KB document embeddings |
+| **LLM** | Llama 3.1-8B via Groq API | Generates summaries and draft replies |
+| **LLM Orchestration** | LangChain | Prompt template management + output parsing |
+| **Env Management** | python-dotenv | Manages API keys securely via `.env` file |
+| **PDF Parsing** | pypdf | Extracts text from PDF knowledge base documents |
+| **Text Splitting** | LangChain `RecursiveCharacterTextSplitter` | Chunks documents for vector storage |
+
+### The "Spine" — What Ties Everything Together
+
+The **spine of this project is the FastAPI orchestrator** (`main.py`). It is the central nervous system that:
+
+1. **Loads all models into memory** at startup (DistilBERT, SentenceTransformer, ChromaDB)
+2. **Receives HTTP requests** from the frontend
+3. **Calls each AI component in sequence**: Classify → Retrieve → Generate
+4. **Packages and returns** the combined result as structured JSON
+5. **Serves the frontend** at the root URL `/`
+
 Without the orchestrator, the three AI systems cannot communicate with each other. It is the glue that transforms three independent AI tools into one unified pipeline.
 
-6. 🧩 RAG, DistilBERT & LLM — Implementation Deep Dive
-6.1 What is RAG? (Retrieval-Augmented Generation)
-RAG is an architecture pattern that solves a critical problem with LLMs: hallucination.
+---
+
+## 6. 🧩 RAG, DistilBERT & LLM — Implementation Deep Dive
+
+### 6.1 What is RAG? (Retrieval-Augmented Generation)
+
+**RAG** is an architecture pattern that solves a critical problem with LLMs: **hallucination**.
 
 Without RAG:
-
+```
 User: "What is your refund policy?"
 LLM (no context): "Our refund policy allows returns within 14 days..."  ← MADE UP! Could be wrong!
-With RAG:
+```
 
+With RAG:
+```
 User: "What is your refund policy?"
 Step 1: Search KB → finds refund_policy.txt: "30-day refund window, original packaging required..."
 Step 2: Give the REAL policy to the LLM
 LLM (with context): "Our refund policy allows returns within 30 days, and items must be in original packaging..."  ← GROUNDED IN FACTS!
-How RAG is implemented in HelpDeskAi:
+```
 
+**How RAG is implemented in HelpDeskAi:**
+
+```python
 # Step 1: RETRIEVE — Find relevant documents using semantic similarity
 def retrieve_context(text, top_k=2):
     # Encode the user's query into a 384-dim vector
@@ -331,11 +410,15 @@ reply_prompt = ChatPromptTemplate.from_messages([
 draft_reply = (reply_prompt | llm | StrOutputParser()).invoke(
     {"context": context_str, "issue": text}
 )
-The guardrail: The system prompt explicitly instructs the LLM: "Do NOT invent information that is not in the context." If no relevant context is found, it responds with a safe fallback message.
+```
 
-6.2 DistilBERT Implementation Details
-Architecture class (train_classifier.py):
+**The guardrail**: The system prompt explicitly instructs the LLM: *"Do NOT invent information that is not in the context."* If no relevant context is found, it responds with a safe fallback message.
 
+### 6.2 DistilBERT Implementation Details
+
+**Architecture class** (`train_classifier.py`):
+
+```python
 class MultiHeadDistilBERT(nn.Module):
     def __init__(self):
         super().__init__()
@@ -360,20 +443,25 @@ class MultiHeadDistilBERT(nn.Module):
         urgency_logits  = self.urg_head(self.urg_dropout(cls_hidden))  # (batch, 3)
         
         return category_logits, urgency_logits
-The [CLS] Token: DistilBERT processes the entire input text and produces a hidden state for every token. The [CLS] token (the first token) acts as a summary representation of the entire input. We extract this 768-dimensional vector and feed it to both classification heads.
+```
 
-Types of Classification Used:
+**The [CLS] Token**: DistilBERT processes the entire input text and produces a hidden state for every token. The `[CLS]` token (the first token) acts as a **summary representation of the entire input**. We extract this 768-dimensional vector and feed it to both classification heads.
 
-Type	Description	Used For
-Multi-Class Classification	One label from many possible classes	Category (6 classes), Urgency (3 classes)
-Multi-Task Learning	Model predicts multiple targets simultaneously	Category AND Urgency from the same backbone
-Transfer Learning	Using a pretrained model as the starting point	DistilBERT pretrained on English Wikipedia + BookCorpus
-Fine-Tuning	Updating ALL weights of the pretrained model on task-specific data	All layers of DistilBERT are updated during training
-6.3 LLM Implementation Details
-Two separate LLM calls are made per ticket:
+**Types of Classification Used:**
 
-Call 1 — Draft Reply Generation:
+| Type | Description | Used For |
+|---|---|---|
+| **Multi-Class Classification** | One label from many possible classes | Category (6 classes), Urgency (3 classes) |
+| **Multi-Task Learning** | Model predicts multiple targets simultaneously | Category AND Urgency from the same backbone |
+| **Transfer Learning** | Using a pretrained model as the starting point | DistilBERT pretrained on English Wikipedia + BookCorpus |
+| **Fine-Tuning** | Updating ALL weights of the pretrained model on task-specific data | All layers of DistilBERT are updated during training |
 
+### 6.3 LLM Implementation Details
+
+**Two separate LLM calls are made per ticket:**
+
+**Call 1 — Draft Reply Generation:**
+```python
 llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.0)
 
 system_prompt = """
@@ -388,53 +476,184 @@ Do NOT invent information that is not in the context.
 Knowledge Base Context:
 {context}
 """
-Call 2 — Summary Generation:
+```
 
+**Call 2 — Summary Generation:**
+```python
 system_prompt = "Write a single short sentence summary of the user's issue."
-LangChain Pipeline: We use LangChain's ChatPromptTemplate → ChatGroq → StrOutputParser chain for clean prompt management and output parsing.
+```
 
-7. 📊 Evaluation Results
-7.1 Classification Model Performance
+**LangChain Pipeline**: We use LangChain's `ChatPromptTemplate → ChatGroq → StrOutputParser` chain for clean prompt management and output parsing.
+
+---
+
+## 7. 📊 Evaluation Results
+
+### 7.1 Classification Model Performance
+
 The DistilBERT model was trained for 3 epochs on the preprocessed dataset with the following results:
 
-Metric	Training Set	Validation Set
-Category Accuracy	~92%	~88%
-Urgency Accuracy	~85%	~82%
-Combined Loss	0.35	0.42
-7.2 RAG Retrieval Quality
+| Metric | Training Set | Validation Set |
+|---|---|---|
+| **Category Accuracy** | ~92% | ~88% |
+| **Urgency Accuracy** | ~85% | ~82% |
+| **Combined Loss** | 0.35 | 0.42 |
+
+### 7.2 RAG Retrieval Quality
+
 The ChromaDB retrieval system was tested with various queries:
 
-Query	Expected Source	Retrieved Source	Match?
-"I forgot my password"	password_reset.txt	password_reset.txt	✅
-"I want a refund for damaged item"	refund_policy.txt	refund_policy.txt	✅
-"My package hasn't arrived"	shipping_delays.txt	shipping_delays.txt	✅
-"Can you help me?" (vague)	—	password_reset.txt (closest)	⚠️ Expected
-7.3 End-to-End Pipeline Results
+| Query | Expected Source | Retrieved Source | Match? |
+|---|---|---|---|
+| "I forgot my password" | password_reset.txt | password_reset.txt | ✅ |
+| "I want a refund for damaged item" | refund_policy.txt | refund_policy.txt | ✅ |
+| "My package hasn't arrived" | shipping_delays.txt | shipping_delays.txt | ✅ |
+| "Can you help me?" (vague) | — | password_reset.txt (closest) | ⚠️ Expected |
+
+### 7.3 End-to-End Pipeline Results
+
 Live test results from the deployed system:
 
-Ticket Text	Category	Urgency	Confidence	Draft Reply Quality
-"i forgot my password"	Login ✅	Low ✅	79.3%	Provided step-by-step password reset instructions ✅
-"my account has been hacked and someone changed my email"	Account ✅	High ✅	81.1%	Acknowledged urgency, provided security steps ✅
-"where is my package it has been 10 days and still not arrived"	Delivery ✅	Medium ✅	87.5%	Referenced shipping timeline, provided tracking guidance ✅
-"i received a damaged product and require a refund"	Refund ✅	Medium ✅	79.3%	Cited 30-day refund policy with correct procedures ✅
-"I was charged twice on my credit card"	Billing ✅	High ✅	83.0%	Acknowledged billing concern, referenced refund timeline ✅
-7.4 Key Performance Metrics
-Metric	Value
-Average Response Time	3-5 seconds (end-to-end)
-Classification Latency	< 50ms
-Retrieval Latency	< 20ms
-LLM Generation Latency	2-4 seconds
-Category Accuracy (live)	100% on tested cases
-Urgency Accuracy (live)	100% on tested cases
-Hallucination Rate	0% (enforced by RAG guardrails)
-8. 📐 Project Flowchart
-8.1 High-Level System Architecture
+| Ticket Text | Category | Urgency | Confidence | Draft Reply Quality |
+|---|---|---|---|---|
+| "i forgot my password" | Login ✅ | Low ✅ | 79.3% | Provided step-by-step password reset instructions ✅ |
+| "my account has been hacked and someone changed my email" | Account ✅ | High ✅ | 81.1% | Acknowledged urgency, provided security steps ✅ |
+| "where is my package it has been 10 days and still not arrived" | Delivery ✅ | Medium ✅ | 87.5% | Referenced shipping timeline, provided tracking guidance ✅ |
+| "i received a damaged product and require a refund" | Refund ✅ | Medium ✅ | 79.3% | Cited 30-day refund policy with correct procedures ✅ |
+| "I was charged twice on my credit card" | Billing ✅ | High ✅ | 83.0% | Acknowledged billing concern, referenced refund timeline ✅ |
 
-8.2 Detailed Data Processing Flowchart
+### 7.4 Key Performance Metrics
 
-8.3 Training Pipeline Flowchart
+| Metric | Value |
+|---|---|
+| **Average Response Time** | 3-5 seconds (end-to-end) |
+| **Classification Latency** | < 50ms |
+| **Retrieval Latency** | < 20ms |
+| **LLM Generation Latency** | 2-4 seconds |
+| **Category Accuracy** (live) | 100% on tested cases |
+| **Urgency Accuracy** (live) | 100% on tested cases |
+| **Hallucination Rate** | 0% (enforced by RAG guardrails) |
 
-9. 📁 Project File Structure
+---
+
+## 8. 📐 Project Flowchart
+
+### 8.1 High-Level System Architecture
+
+```mermaid
+graph TD
+    classDef frontend fill:#1a1a2e,stroke:#00D4FF,stroke-width:2px,color:#E8F4FF
+    classDef backend fill:#0f2240,stroke:#0A6EFF,stroke-width:2px,color:#E8F4FF
+    classDef ai fill:#0C1C30,stroke:#00E5A0,stroke-width:2px,color:#E8F4FF
+    classDef db fill:#0C1C30,stroke:#A855F7,stroke-width:2px,color:#E8F4FF
+    classDef output fill:#1a1a2e,stroke:#FFB520,stroke-width:2px,color:#E8F4FF
+
+    USER["👤 Customer Support Agent<br>Opens Dashboard at localhost:8000"]:::frontend
+    FORM["📝 Ticket Form<br>Subject + Description + Channel + Timestamp"]:::frontend
+    API["⚡ FastAPI Orchestrator<br>main.py — Central Pipeline Controller"]:::backend
+    
+    BERT["🧠 Stage 1: DistilBERT<br>Multi-Task Classification<br>Category + Urgency + Confidence"]:::ai
+    RAG["📚 Stage 2: RAG Retrieval<br>SentenceTransformer + ChromaDB<br>Finds Top-2 KB Documents"]:::db
+    LLM["💬 Stage 3: Llama 3.1<br>Grounded Reply Generation<br>Summary + Draft Reply"]:::ai
+    
+    RESULT["📊 Triage Dashboard<br>Category • Urgency • Confidence<br>AI Summary • Draft Reply • Sources"]:::output
+
+    USER --> FORM
+    FORM -->|"HTTP POST /process-ticket"| API
+    API --> BERT
+    API --> RAG
+    RAG -->|"KB Context"| LLM
+    API -->|"Ticket Text"| LLM
+    BERT -->|"Category + Urgency"| API
+    LLM -->|"Summary + Draft Reply"| API
+    API -->|"JSON Response"| RESULT
+```
+
+### 8.2 Detailed Data Processing Flowchart
+
+```mermaid
+graph TD
+    classDef process fill:#091525,stroke:#00D4FF,stroke-width:1px,color:#E8F4FF
+    classDef decision fill:#0F2240,stroke:#FFB520,stroke-width:1px,color:#E8F4FF
+    classDef data fill:#0C1C30,stroke:#00E5A0,stroke-width:1px,color:#E8F4FF
+
+    A["🎫 Raw Ticket Input<br>Subject + Description"]:::data
+    B["🔗 Text Concatenation<br>Combined = Subject + Description"]:::process
+    
+    C["🔤 DistilBERT Tokenizer<br>Text → Token IDs + Attention Mask<br>Max Length: 128 tokens"]:::process
+    D["🧠 DistilBERT Forward Pass<br>Token IDs → CLS Hidden State<br>768-dimensional vector"]:::process
+    E["📊 Category Head<br>Linear 768→6 + Softmax<br>Output: Category + Confidence"]:::process
+    F["📊 Urgency Head<br>Linear 768→3 + Argmax<br>Output: Urgency Level"]:::process
+    
+    G["🔢 SentenceTransformer<br>Text → 384-dim Embedding Vector"]:::process
+    H["🔍 ChromaDB Cosine Search<br>Find Top-2 Nearest KB Chunks"]:::process
+    I["📄 Retrieved Documents<br>refund_policy.txt, password_reset.txt, etc."]:::data
+    
+    J["📝 LangChain Prompt Template<br>System Prompt + KB Context + User Issue"]:::process
+    K["🤖 Groq API Call<br>Llama 3.1-8B-Instant<br>Temperature: 0.0"]:::process
+    L["✉️ Draft Reply + Summary"]:::data
+    
+    M["📦 JSON Response Assembly<br>category, urgency, confidence,<br>summary, draft_reply, sources"]:::data
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    D --> F
+    
+    B --> G
+    G --> H
+    H --> I
+    
+    I --> J
+    B --> J
+    J --> K
+    K --> L
+    
+    E --> M
+    F --> M
+    L --> M
+    I --> M
+```
+
+### 8.3 Training Pipeline Flowchart
+
+```mermaid
+graph TD
+    classDef data fill:#091525,stroke:#00D4FF,stroke-width:1px,color:#E8F4FF
+    classDef process fill:#0F2240,stroke:#00E5A0,stroke-width:1px,color:#E8F4FF
+    classDef model fill:#0C1C30,stroke:#A855F7,stroke-width:1px,color:#E8F4FF
+
+    RAW["📁 Raw Kaggle CSV<br>~8,000 customer support tickets"]:::data
+    PRE["🧹 preprocess_kaggle.py<br>Concatenate Subject + Description<br>Map categories and urgency levels"]:::process
+    CLEAN["📊 Clean CSV<br>ticket_text, category, urgency"]:::data
+    
+    SPLIT["✂️ Train/Val Split<br>80% Train / 20% Validation<br>Stratified on Category"]:::process
+    TOK["🔤 DistilBERT Tokenizer<br>Text → Token IDs<br>Max Length: 128"]:::process
+    DS["📦 PyTorch DataLoader<br>Batch Size: 16<br>Shuffled"]:::process
+    
+    MODEL["🧠 MultiHeadDistilBERT<br>Pretrained backbone<br>+ 2 Linear classification heads"]:::model
+    TRAIN["🏋️ Training Loop<br>3 Epochs × AdamW × CrossEntropy<br>Gradient Clipping max_norm=1.0"]:::process
+    EVAL["📈 Validation Evaluation<br>Track Loss, Cat Acc, Urg Acc<br>Save best model"]:::process
+    
+    SAVE["💾 Saved Artifacts<br>model.pt + tokenizer + label_maps.json"]:::data
+
+    RAW --> PRE
+    PRE --> CLEAN
+    CLEAN --> SPLIT
+    SPLIT --> TOK
+    TOK --> DS
+    DS --> TRAIN
+    MODEL --> TRAIN
+    TRAIN --> EVAL
+    EVAL -->|"Best Val Loss"| SAVE
+```
+
+---
+
+## 9. 📁 Project File Structure
+
+```
 deepbluesynthetix/
 ├── main.py                    # 🔧 FastAPI orchestrator (central pipeline)
 ├── train_classifier.py        # 🧠 DistilBERT training pipeline
@@ -459,10 +678,15 @@ deepbluesynthetix/
 │
 └── DATASETS/                  # Raw training data
     └── customer_support_tickets.csv
-10. 🎯 Key Takeaways for Hackathon Judges
-End-to-End AI Pipeline: Not just one model — three AI systems working together in a single orchestrated pipeline
-RAG Architecture: Ensures zero hallucination by grounding all LLM responses in actual company policy documents
-Multi-Task Learning: DistilBERT predicts category AND urgency simultaneously with a shared backbone — efficient and elegant
-Production-Ready Design: FastAPI backend with proper error handling, CORS, health checks, Swagger docs, and a beautiful dark-mode frontend
-Real-Time Performance: End-to-end response in 3-5 seconds, with classification in under 50ms
-Extensible: Adding new categories requires only updating keyword lists; adding new KB documents requires only dropping files into kb_data/ and running ingest_kb.py
+```
+
+---
+
+## 10. 🎯 Key Takeaways for Hackathon Judges
+
+1. **End-to-End AI Pipeline**: Not just one model — three AI systems working together in a single orchestrated pipeline
+2. **RAG Architecture**: Ensures zero hallucination by grounding all LLM responses in actual company policy documents
+3. **Multi-Task Learning**: DistilBERT predicts category AND urgency simultaneously with a shared backbone — efficient and elegant
+4. **Production-Ready Design**: FastAPI backend with proper error handling, CORS, health checks, Swagger docs, and a beautiful dark-mode frontend
+5. **Real-Time Performance**: End-to-end response in 3-5 seconds, with classification in under 50ms
+6. **Extensible**: Adding new categories requires only updating keyword lists; adding new KB documents requires only dropping files into `kb_data/` and running `ingest_kb.py`
